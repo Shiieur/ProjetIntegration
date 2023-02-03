@@ -1,0 +1,33 @@
+.recipe-grid{
+    padding: 50px;
+    background-color: azure;   
+    background-repeat: no-repeat;    
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;  
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.recipe-container{    
+    background-color: azure;    
+    border: 2px solid black;     
+    margin: 5px;
+    width: 600px;
+    height: 400px;
+    display : flex;     
+    flex-direction: row;
+    justify-content: center;
+}
+
+.left-half{
+    flex: 0.5; 
+    min-width: 0;      
+}
+
+.right-half{     
+    flex: 0.6; 
+    min-width: 0;
+}
+
+

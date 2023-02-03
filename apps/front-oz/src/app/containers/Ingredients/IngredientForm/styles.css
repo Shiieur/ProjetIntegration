@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+
+.body{
+    padding: 50px;
+    background-color: azure;   
+    background-repeat: no-repeat;    
+    background-position: center;
+    background-attachment: fixed;    
+    font-family: Comfortaa;
+}
+
+.grid-container{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    background-color: gray;
+}

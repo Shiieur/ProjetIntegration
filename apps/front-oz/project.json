@@ -1,0 +1,80 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/front-oz/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/front-oz",
+        "index": "apps/front-oz/src/index.html",
+        "baseHref": "/",
+        "main": "apps/front-oz/src/main.tsx",
+        "polyfills": "apps/front-oz/src/polyfills.ts",
+        "tsConfig": "apps/front-oz/tsconfig.app.json",
+        "assets": ["apps/front-oz/src/favicon.ico", "apps/front-oz/src/assets"],
+        "styles": ["apps/front-oz/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/front-oz/src/environments/environment.ts",
+              "with": "apps/front-oz/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "front-oz:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "front-oz:build:development"
+        },
+        "production": {
+          "buildTarget": "front-oz:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/front-oz/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/front-oz"],
+      "options": {
+        "jestConfig": "apps/front-oz/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
