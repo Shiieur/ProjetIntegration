@@ -34,6 +34,33 @@ export interface IRecipe {
   ingredients: IIngredient[];  
 }
 
+export interface IRecipeRequest {
+  id?: number;
+  name: string;
+  imageUrls: string[];
+  steps: string;
+  quantity: number; //for the number of person
+  type: RecipeType;
+  tags: string[];
+  ingredientsInfo: IIngredient[];  
+}
+
+export interface IRecipeFormik {
+  id?: number;
+  name: string;
+  images: 
+  {
+    "label": string,
+    "value": string,
+  }[];
+  steps: string;
+  quantity: number; //for the number of person
+  type: RecipeType;
+  tags: string[];
+  ingredients: IIngredient[];  
+}
+
+
 export enum IngredientTypeProp {
   List = '/ingredients/list',
   Form = '/ingredients/form',

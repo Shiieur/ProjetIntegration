@@ -1,11 +1,12 @@
 import './styles.css';
+import CreatableSelect from 'react-select/creatable';
 
 interface IProps {
   label: string;
   name: string;
   inputType: string;
   placeholder?: string;
-  checked?:boolean;
+  checked?: boolean;
   options?: string[];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,12 +55,23 @@ const FormInput = ({
           <input
             name={name}
             type={inputType}
-            value={formik.values.name}            
+            value={formik.values.name}
             onChange={formik.handleChange}
           />
           <p>{formik.errors[name]}</p>
         </>
       )}
+      {inputType === 'creatable' && (
+        <>
+          <label htmlFor={name}>{label}</label>
+          <CreatableSelect isMulti
+            value={formik.values.images}
+            onChange={(assignedImage) => formik.setFieldValue('images', assignedImage)}
+          />
+          <p>{formik.errors[name]}</p>
+        </>
+      )}
+
       {inputType === 'select' && (
         <>
           <label htmlFor={name}>{label}</label>

@@ -5,7 +5,7 @@ import { IFullRecipeEntity, IRecipeEntity } from './recipes.entity';
 export const insertRecipe = async (recipeEntity: IRecipeEntity): Promise<number> => {
   const connector = getConnector();
   const recipeIds = await connector('recipes').insert(recipeEntity);
-  return recipeIds[0];
+  return recipeIds[0]; 
 };
 
 export const getAllFullRecipes = async (recipeIds?: number[]): Promise<IFullRecipeEntity[]> => {

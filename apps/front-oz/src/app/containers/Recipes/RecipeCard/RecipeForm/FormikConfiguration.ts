@@ -1,6 +1,7 @@
-import { HttpClient, getToast } from '../../../utils/api';
+
+import { getToast, HttpClient } from 'src/app/utils/api';
 import { array, number, object, string } from 'yup';
-import { EntityType, IImage, IRecipe, IRecipeFormik, IRecipeRequest, RecipeType } from '../../../utils/interfaces';
+import { EntityType, IImage, IRecipe, IRecipeFormik, IRecipeRequest, RecipeType } from 'src/app/utils/interfaces';
 
 export interface IFormikConfiguration {
   recipe?: IRecipe;

@@ -1,9 +1,9 @@
 import { useFormik } from 'formik';
 import FormikConfiguration from './FormikConfiguration';
-import FormInput from '../../../components/FormInput';
-import SubmitButton from '../../../components/SubmitButton';
-import { IIngredient, IRecipe } from '../../../utils/interfaces';
-import FormSelectList from '../../../components/FormSelectList';
+import SubmitButton from 'src/app/components/SubmitButton';
+import { IIngredient, IRecipe } from 'src/app/utils/interfaces';
+import FormSelectList from 'src/app/components/FormSelectList';
+import FormInput from 'src/app/components/FormInput';
 
 export interface IRecipeForm {
   recipe: IRecipe;

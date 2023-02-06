@@ -10,7 +10,16 @@ import {
   getIngredientsRequest,
 } from '../../utils/api';
 
-const Recipes = () => { 
+interface IRecipesProps {
+  setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
+  pageState: 'list' | 'form';
+}
+
+const Recipes = (
+  {
+    pageState, 
+    setPageState
+  } : IRecipesProps) => { 
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
 
   const [ingredients, setIngredients] = useState<IIngredient[]>([]);
@@ -28,7 +37,7 @@ const Recipes = () => {
     ingredients: [],
   });
 
-  const [pageState, setPageState] = useState<'list' | 'form'>('list');
+  
   
   useEffect(() => {
     getRecipes();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -10,19 +10,21 @@ import Ingredients from './containers/Ingredients/Ingredients';
 import FontStyles from 'src/assets/fontStyles';
 
 export function App() {
+  const [pageState, setPageState] = useState<'list' | 'form'>('list');
+
   return (
     <>
       <FontStyles/>      
       <Toaster />
       <Router>
-        <Header />
+        <Header pageState={pageState} setPageState={setPageState}/>
         <Routes>
           <Route
             key="ingredients"
             path={'/ingredients'}
             element={<Ingredients />}
           />
-          <Route key="recipes" path={'/recipes'} element={<Recipes />} />
+          <Route key="recipes" path={'/recipes'} element={<Recipes pageState={pageState} setPageState={setPageState} />} />
           <Route path="*" key="default-error" element={<Home />} />
         </Routes>
       </Router>

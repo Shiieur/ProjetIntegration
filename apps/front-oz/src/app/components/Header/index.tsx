@@ -23,9 +23,17 @@ import { canSee } from 'src/app/utils/functions';
 import { useNavigate } from 'react-router-dom';
 import { RecipeType } from 'src/app/utils/interfaces';
 
+interface IHeaderProps {
+  setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
+  pageState: 'list' | 'form';
+}
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const Header = () => {
+const Header = ({
+  pageState, 
+  setPageState
+} : IHeaderProps) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const navigate = useNavigate();
   const [dropBoxState, setDropBoxState] = useState<'search' | 'menu'>('search');
@@ -94,7 +102,7 @@ const Header = () => {
             <>
             <Button sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem'}}>Mes recettes</Button>
             {canSee('moderator') === true ? <Button sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem'}} onClick ={() => {navigate("ingredients"); setHeight(closeHeight)}}>Ingrédients</Button> : <></>}      
-            <Button sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem'}}>Ajouter une recette</Button>
+            <Button sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem'}} onClick ={() => {setPageState('form'); navigate("recipes"); setHeight(closeHeight)}}>Ajouter une recette</Button>
             <LogoutButton/>
             </>
             ) : (

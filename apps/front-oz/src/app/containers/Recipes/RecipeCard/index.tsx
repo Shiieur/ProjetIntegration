@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { IIngredient, IRecipe, IImage } from '../../../utils/interfaces';
 import { useEffect } from 'react';
 import CardInfos from 'src/app/components/CardsGrid/CardInfos';
+import { Container } from 'src/app/components/CardsGrid/style';
 
 export interface IRecipeCard {
   recipes: IRecipe[];
@@ -29,26 +30,15 @@ export const RecipeCard = ({
   }, []);
 
   const randomImage = (images : IImage[]) => {
-    return images[Math.floor(Math.random() * images.length)].url;
+    return images[Math.floor(Math.random() * images.length)]?.url;
   }
 
-  return (
-    <div className="body">
-      <IconButton
-        aria-label="add_recipe"
-        size="small"
-        onClick={() => {
-          setPageState('form');
-        }}
-      >
-        <AddIcon fontSize="large" />
-      </IconButton>
-      <div className="recipe-grid">
-        {recipes.map((recipe, index) => (
-          <CardInfos title={recipe.name} tags={recipe.tags} image={randomImage(recipe.images)} inverted={index > 2} bookmarked={recipe.bookmarked}/>
-        ))}
-      </div>
-    </div>
+  return (   
+        <Container>
+          {recipes.map((recipe, index) => (
+            <CardInfos title={recipe.name} tags={recipe.tags} image={randomImage(recipe.images)} inverted={index > 2} bookmarked={recipe.bookmarked}/>
+          ))}
+        </Container>   
   );
 };
 export default RecipeCard;
