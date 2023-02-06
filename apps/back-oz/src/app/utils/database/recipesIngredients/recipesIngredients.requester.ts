@@ -5,7 +5,7 @@ export const insertRecipesIngredients = async (
   recipesIngredientsEntity: IRecipesIngredientsEntity
 ): Promise<number> => {
   const connector = getConnector();
-  console.log('recipesIngredientsEntity', recipesIngredientsEntity);
+  // console.log('recipesIngredientsEntity', recipesIngredientsEntity);
   const recipesingredientsIds = await connector('recipes_ingredients').insert(recipesIngredientsEntity);
 
   return recipesingredientsIds[0];

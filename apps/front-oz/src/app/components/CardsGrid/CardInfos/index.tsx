@@ -7,13 +7,15 @@ export type TCustomCardInfos = {
     tags: string[];
     image: string;
     inverted?: boolean;
+    bookmarked: boolean;
 }
 
 const CardInfos = ({
     title,
     tags,
     image,
-    inverted = false
+    inverted = false,
+    bookmarked,
 } : TCustomCardInfos) => { 
     return (    
         <Card image={image}>
@@ -21,7 +23,7 @@ const CardInfos = ({
             <Infos>
                 <Title>{title}</Title>
                 <CardTags tags={tags}/>  
-                <CardFooter inverted={inverted} />              
+                <CardFooter inverted={inverted} bookmarked={bookmarked}/>              
             </Infos>            
         </Card>     
     )

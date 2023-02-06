@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { IIngredient, IRecipe, IImage } from '../../../utils/interfaces';
 import { useEffect } from 'react';
+import CardInfos from 'src/app/components/CardsGrid/CardInfos';
 
 export interface IRecipeCard {
   recipes: IRecipe[];
@@ -18,9 +19,9 @@ export interface IRecipeCard {
 export const RecipeCard = ({
   recipes,
   setPageState,
-  setSelectedRecipe,
-  setIngredients,
-  deleteRecipe,
+  setSelectedRecipe, //TODO
+  setIngredients, //TODO
+  deleteRecipe, //TODO
   onRefresh,
 }: IRecipeCard) => {
   useEffect(() => {
@@ -43,26 +44,8 @@ export const RecipeCard = ({
         <AddIcon fontSize="large" />
       </IconButton>
       <div className="recipe-grid">
-        {recipes.map((recipe) => (
-          <div className="recipe-container">
-            <div className="left-half">
-              <CardHeader
-                image={randomImage(recipe.images)}
-                height="400"
-                width="600"
-                alt={recipe.name}
-              />
-            </div>
-            <div className="right-half">
-              <CardBody
-                recipe={recipe}
-                setPageState={setPageState}
-                setSelectedRecipe={setSelectedRecipe}
-                setIngredients={setIngredients}
-                deleteRecipe={deleteRecipe}
-              />
-            </div>
-          </div>
+        {recipes.map((recipe, index) => (
+          <CardInfos title={recipe.name} tags={recipe.tags} image={randomImage(recipe.images)} inverted={index > 2} bookmarked={recipe.bookmarked}/>
         ))}
       </div>
     </div>

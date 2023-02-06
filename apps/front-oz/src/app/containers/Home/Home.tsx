@@ -3,7 +3,7 @@ import CardsGrid from '../../components/CardsGrid';
 
 
 const Home = () => {
-  return <><CardsGrid/><UserProfile/></>
+  return <UserProfile />
 };
 
 export default Home;

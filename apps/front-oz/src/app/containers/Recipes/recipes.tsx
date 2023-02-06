@@ -46,7 +46,9 @@ const Recipes = () => {
 
   const getRecipes = async () => {
     const response = await getRecipesRequest();
+    console.log(response.data)
     setRecipes(response.data);
+    
   };
 
   const deleteRecipe = async (id: number, name?: string) => {

@@ -40,6 +40,7 @@ export const getAllFullRecipes = async (recipeIds?: number[]): Promise<IFullReci
       }
     })
     .orderBy('rec.recipeId', 'desc');
+    // console.log(fullRecipes)
 
   return fullRecipes;
 };

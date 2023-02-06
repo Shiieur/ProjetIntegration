@@ -58,7 +58,7 @@ export class RecipeService {
 
   async getAll() {   
     const recipes: IFullRecipeEntity[] = await getAllFullRecipes();
-    console.log(`Recipes received from database are : ${JSON.stringify(recipes)}`);
+    // console.log(`Recipes received from database are : ${JSON.stringify(recipes)}`);
     const recipeImages = await getRecipesImages(recipes);
     const ingredientImages = await getIngredientsImages(recipes);
 

@@ -1,5 +1,4 @@
 import { useFormik } from 'formik';
-import './styles.css';
 import FormikConfiguration from './FormikConfiguration';
 import FormInput from '../../../components/FormInput';
 import SubmitButton from '../../../components/SubmitButton';

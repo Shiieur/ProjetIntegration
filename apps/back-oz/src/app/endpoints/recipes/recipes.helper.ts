@@ -67,14 +67,14 @@ export const getRecipesImages = async (recipes: IFullRecipeEntity[]): Promise<II
 };
 
 export const getIngredientsImages = async (recipes: IFullRecipeEntity[]): Promise<IImagesEntity[]> => {
-  console.log('===>recipes');
-  console.log(JSON.stringify(recipes));
+  // console.log('===>recipes');
+  // console.log(JSON.stringify(recipes));
 
   const imageIngredientsToFetch = recipes.map((recipe) => recipe.ingredient_id);
   const ingredientImages =
     imageIngredientsToFetch.length > 0 ? await getImagesByIngredients(imageIngredientsToFetch) : [];
-  console.log('===i');
-  console.log(JSON.stringify(ingredientImages));
+  // console.log('===i');
+  // console.log(JSON.stringify(ingredientImages));
 
   return ingredientImages;
 };

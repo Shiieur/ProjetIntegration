@@ -21,13 +21,14 @@ import { Button } from '@mui/material';
 import { colors } from 'src/assets/colors';
 import { canSee } from 'src/app/utils/functions';
 import { useNavigate } from 'react-router-dom';
+import { RecipeType } from 'src/app/utils/interfaces';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Header = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const navigate = useNavigate();
-  const [clickedState, setClickedState] = useState<'search' | 'menu'>('search');
+  const [dropBoxState, setDropBoxState] = useState<'search' | 'menu'>('search');
   const closeHeight = 50;
   const openHeight = 170;
   const openHeightMenu = 300;
@@ -37,15 +38,14 @@ const Header = () => {
   return (
     <StyledContainer duration={500} height={height}>
       <Container>
-        <IconButton onClick={() => console.log('Clicked')}>
+        <IconButton onClick ={() => {navigate("recipes"); localStorage.setItem('search', RecipeType.MEAL)}}>
           <LocalBarIcon fontSize="large" />
         </IconButton>
-        {/* <NavigationButton url={url} endpoint={'/recipes'} /> */}
-        <IconButton onClick={() => console.log('Clicked')}>
+        <IconButton onClick ={() => {navigate("recipes"); localStorage.setItem('search', RecipeType.DRINK)}}>
           <LocalDiningIcon fontSize="large" />
         </IconButton>
         <IconButton
-          onClick={() => {if(height < openHeight){setClickedState('search')}; setHeight(height === closeHeight ? openHeight : closeHeight)} //if closed -> open search -> else close
+          onClick={() => {if(height < openHeight){setDropBoxState('search')}; setHeight(height === closeHeight ? openHeight : closeHeight)} //if closed -> open search -> else close
           }
           hasBorder={true}
           transformY={`25px`}
@@ -62,12 +62,12 @@ const Header = () => {
         </IconButton>        
         <IconButton onClick={() => { //if open and on search, close and re-open on menu / if open on menu, do nothing / if closed, open on menu
           if(height < openHeight){
-            setClickedState('menu');
+            setDropBoxState('menu');
             setHeight(openHeightMenu);
           }; 
-          if (clickedState==='search') {
+          if (dropBoxState==='search') {
             setHeight(closeHeight);
-            setClickedState('menu');
+            setDropBoxState('menu');
             setHeight(openHeightMenu);            
           }; 
           }}>
@@ -76,7 +76,7 @@ const Header = () => {
         </IconButton>   
       </Container>
       {
-        clickedState === 'search' ? (
+        dropBoxState === 'search' ? (
         <Container>
           <TextFieldContainer>
             <Text>Recette</Text>

@@ -1,5 +1,4 @@
 import { IIngredient } from '../../utils/interfaces';
-import './styles.css';
 import { IOptions, IQuantities } from '.';
 
 export const setSelectedValuesInFormik = (

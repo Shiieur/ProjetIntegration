@@ -36,7 +36,8 @@ export class RecipesController {
     bodyRecipe: RecipesCreateRequestDto,
     @Res() response: Response
   ) {
-    const result = await this.recipeService.create(bodyRecipe);
+    console.log("on atteint le controller");
+    const result = await this.recipeService.create(bodyRecipe);    
     infologger.debug(`Create recipe success : ${JSON.stringify(bodyRecipe)}`);
     return response.status(HttpStatus.CREATED).json(result);
   }

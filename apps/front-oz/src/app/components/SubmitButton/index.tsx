@@ -1,5 +1,3 @@
-import './styles.css';
-
 interface IProps {
   type: 'button' | 'submit' | 'reset' | undefined;
   label: string;

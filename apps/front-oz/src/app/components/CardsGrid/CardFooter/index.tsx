@@ -2,16 +2,19 @@ import { BottomLeft, BottomRight, Footer } from './style';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined';
+import StarIcon from '@mui/icons-material/Star';
 import { colors } from '../../../../assets/colors'
 import { IconButton } from '@mui/material';
 
 
 export type TCustomFooter = {    
     inverted: boolean;
+    bookmarked: boolean;
 }
 
 const CardFooter = ({
-    inverted
+    inverted,
+    bookmarked
 } : TCustomFooter) => {
     return (
         <Footer>
@@ -19,7 +22,11 @@ const CardFooter = ({
                 <>      
                     <BottomLeft>
                         <IconButton onClick={() => console.log('Clicked')}>
-                            <StarOutlineOutlinedIcon sx={{ color: colors.white }} fontSize="large"/>
+                            {bookmarked ? (
+                                <StarIcon sx={{ color: colors.white }} fontSize="large"/>
+                            ) : (
+                                <StarOutlineOutlinedIcon sx={{ color: colors.white }} fontSize="large"/>
+                            )}                            
                         </IconButton>                        
                     </BottomLeft>
                     <BottomRight>

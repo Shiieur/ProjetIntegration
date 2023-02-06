@@ -1,4 +1,3 @@
-import './styles.css';
 import React, { useState } from 'react';
 import FormSelect from '../FormSelect';
 import { getOptions, setSelectedValuesInFormik } from './helper';
