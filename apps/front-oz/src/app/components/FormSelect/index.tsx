@@ -3,19 +3,16 @@ import React, { Fragment } from 'react';
 import Select from 'react-select';
 
 interface IProps {
-  ingredientsOptions: {
+  options: {
     value: number;
     label: string;
   }[];
   onSelectChange: (values: { value: number; label: string }) => void;
   defaultValue?: { value: number; label: string };
+  name: string;
 }
 
-const FormSelect = ({
-  ingredientsOptions,
-  onSelectChange,
-  defaultValue,
-}: IProps) => {
+const FormSelect = ({ options, onSelectChange, defaultValue, name }: IProps) => {
   return (
     <Fragment>
       <Select
@@ -26,13 +23,11 @@ const FormSelect = ({
         isClearable={true}
         isRtl={false}
         isSearchable={true}
-        name={'ingredients'}
-        options={ingredientsOptions}
+        name={name}
+        options={options}
         defaultValue={defaultValue ?? 'Nothing'}
         value={defaultValue ?? 'Nothing'}
-        onChange={(values) =>
-          onSelectChange(values as { value: number; label: string })
-        }
+        onChange={(values) => onSelectChange(values as { value: number; label: string })}
       />
       <div
         style={{

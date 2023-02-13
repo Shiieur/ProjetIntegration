@@ -1,6 +1,8 @@
 CREATE DATABASE Dboz;
 USE Dboz;
 
+DROP database Dboz;
+
 CREATE TABLE `ingredients` (
   `ingredientId` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,

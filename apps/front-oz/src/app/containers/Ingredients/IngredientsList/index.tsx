@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { ListRow, ListFooter, ListHeader } from './list';
-import { IIngredient } from '../../../utils/interfaces';
+import { IGetIngredient, IIngredient } from '../../../utils/interfaces';
 
 export type Order = 'asc' | 'desc';
 
@@ -16,20 +16,15 @@ export interface EnhancedTableToolbarProps {
 }
 
 export interface IIngredientList {
-  ingredients: IIngredient[];
-  setSelectedIngredient: React.Dispatch<React.SetStateAction<IIngredient>>;
+  ingredients: IGetIngredient[];
+  setSelectedIngredient: React.Dispatch<React.SetStateAction<IGetIngredient>>;
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
   deleteIngredient: (id: number, name?: string) => Promise<void>;
+  resetIngredient: () => void;
   onRefresh: () => void;
 }
 
-export const IngredientList = ({
-  ingredients,
-  setPageState,
-  setSelectedIngredient,
-  deleteIngredient,
-  onRefresh,
-}: IIngredientList) => {
+export const IngredientList = ({ ingredients, setPageState, setSelectedIngredient, deleteIngredient, resetIngredient, onRefresh }: IIngredientList) => {
   const [page, setPage] = React.useState(0);
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -54,10 +49,7 @@ export const IngredientList = ({
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
     }
 
     setSelected(newSelected);
@@ -67,17 +59,14 @@ export const IngredientList = ({
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - ingredients.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - ingredients.length) : 0;
 
   useEffect(() => {
     onRefresh();
@@ -85,18 +74,16 @@ export const IngredientList = ({
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>        
+      <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={'medium'}
-          >
+          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
             <ListHeader
               numSelected={selected.length}
               onSelectAllClick={handleSelectAllClick}
               rowCount={ingredients.length}
+              setSelectedIngredient={setSelectedIngredient}
               setPageState={setPageState}
+              resetIngredient={resetIngredient}
             />
             <TableBody>
               {ingredients
@@ -131,13 +118,7 @@ export const IngredientList = ({
             </TableBody>
           </Table>
         </TableContainer>
-        <ListFooter
-          handleChangePage={handleChangePage}
-          handleChangeRowsPerPage={handleChangeRowsPerPage}
-          page={page}
-          rows={ingredients}
-          rowsPerPage={rowsPerPage}
-        />
+        <ListFooter handleChangePage={handleChangePage} handleChangeRowsPerPage={handleChangeRowsPerPage} page={page} rows={ingredients} rowsPerPage={rowsPerPage} />
       </Paper>
     </Box>
   );

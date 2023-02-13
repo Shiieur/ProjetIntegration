@@ -1,35 +1,27 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import RecipeForm from './RecipeForm';
-import axios from 'axios';
-import { EntityType, IIngredient, IRecipe, RecipeType } from '../../utils/interfaces';
+import { EntityType, IIngredient, IGetRecipe, IGetIngredient, IRecipe, RecipeType } from '../../utils/interfaces';
 import RecipeCard from './RecipeCard';
-import {
-  deleteRecipeRequest,
-  getRecipesRequest,
-  getIngredientsRequest,
-} from '../../utils/api';
+import { deleteRecipeRequest, getRecipesRequest, getIngredientsRequest } from '../../utils/api';
+import { CardBody } from './RecipeCard/Card';
 
 interface IRecipesProps {
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
   pageState: 'list' | 'form';
 }
 
-const Recipes = (
-  {
-    pageState, 
-    setPageState
-  } : IRecipesProps) => { 
-  const [recipes, setRecipes] = useState<IRecipe[]>([]);
+const Recipes = ({ pageState, setPageState }: IRecipesProps) => {
+  const [recipes, setRecipes] = useState<IGetRecipe[]>([]);
 
-  const [ingredients, setIngredients] = useState<IIngredient[]>([]);
-  
-  const [selectedRecipe, setSelectedRecipe] = React.useState<IRecipe>({
-    id: -1,
+  const [ingredients, setIngredients] = useState<IGetIngredient[]>([]);
+
+  const [selectedRecipe, setSelectedRecipe] = React.useState<IGetRecipe>({
+    recipeId: -1,
     name: '',
-    images: [{entityId: -1, entityType: EntityType.RECIPE, url: ''}],
-    bookmarked: false,  
-    steps: '',  
+    images: [{ entityId: -1, entityType: EntityType.RECIPE, url: '' }],
+    bookmarked: false,
+    steps: '',
     quantity: 0,
     type: RecipeType.DRINK,
     author: '',
@@ -37,27 +29,25 @@ const Recipes = (
     ingredients: [],
   });
 
-  
-  
   useEffect(() => {
     getRecipes();
     getIngredients();
   }, []);
-  
+
   const onRefresh = () => {
     getRecipes();
+    setPageState('list');
   };
 
   const getIngredients = async () => {
     const response = await getIngredientsRequest();
-    setIngredients(response.data);
+    const ingredients = response.data;
+    setIngredients(ingredients);
   };
 
   const getRecipes = async () => {
     const response = await getRecipesRequest();
-    console.log(response.data)
     setRecipes(response.data);
-    
   };
 
   const deleteRecipe = async (id: number, name?: string) => {
@@ -66,14 +56,8 @@ const Recipes = (
   };
 
   return pageState === 'form' ? (
-    <RecipeForm
-      recipe={selectedRecipe}
-      setPageState={setPageState}
-      ingredientList={ingredients}
-      setSelectedRecipe={setSelectedRecipe}
-      resetIngredients={getIngredients}
-    />
-  ) : (
+    <RecipeForm recipe={selectedRecipe} setPageState={setPageState} ingredientList={ingredients} setSelectedRecipe={setSelectedRecipe} resetIngredients={getIngredients} />
+  ) : selectedRecipe.recipeId === -1 ? (
     <RecipeCard
       recipes={recipes}
       setPageState={setPageState}
@@ -82,6 +66,8 @@ const Recipes = (
       deleteRecipe={deleteRecipe}
       onRefresh={onRefresh}
     />
+  ) : (
+    <CardBody recipe={selectedRecipe} setPageState={setPageState} setSelectedRecipe={setSelectedRecipe} setIngredients={setIngredients} deleteRecipe={deleteRecipe} />
   );
 };
 

@@ -1,18 +1,15 @@
 import './styles.css';
-import { CardBody, CardHeader } from './Card';
 import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import { IIngredient, IRecipe, IImage } from '../../../utils/interfaces';
+import { IIngredient, IGetRecipe, IImage, IGetIngredient } from '../../../utils/interfaces';
 import { useEffect } from 'react';
 import CardInfos from 'src/app/components/CardsGrid/CardInfos';
 import { Container } from 'src/app/components/CardsGrid/style';
 
 export interface IRecipeCard {
-  recipes: IRecipe[];
+  recipes: IGetRecipe[];
   setPageState: React.Dispatch<React.SetStateAction<'form' | 'list'>>;
-  setIngredients: React.Dispatch<React.SetStateAction<IIngredient[]>>;
-  setSelectedRecipe: React.Dispatch<React.SetStateAction<IRecipe>>;
+  setIngredients: React.Dispatch<React.SetStateAction<IGetIngredient[]>>;
+  setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
   deleteRecipe: (id: number, name?: string) => Promise<void>;
   onRefresh: () => void;
 }
@@ -29,16 +26,18 @@ export const RecipeCard = ({
     onRefresh();
   }, []);
 
-  const randomImage = (images : IImage[]) => {
-    return images[Math.floor(Math.random() * images.length)]?.url;
-  }
+  //allows to swap side every 3 cards
+  const isInverted = (index: number) => {
+    const realIndex = index + 1;
+    return realIndex === 1 || realIndex === 2 || realIndex === 3 || (realIndex - 1) % 6 === 0 || (realIndex - 2) % 6 === 0 || (realIndex - 3) % 6 === 0;
+  };
 
-  return (   
-        <Container>
-          {recipes.map((recipe, index) => (
-            <CardInfos title={recipe.name} tags={recipe.tags} image={randomImage(recipe.images)} inverted={index > 2} bookmarked={recipe.bookmarked}/>
-          ))}
-        </Container>   
+  return (
+    <Container>
+      {recipes.map((recipe, index) => (
+        <CardInfos recipe={recipe} inverted={isInverted(index)} setSelectedRecipe={setSelectedRecipe} setPageState={setPageState} deleteRecipe={deleteRecipe} />
+      ))}
+    </Container>
   );
 };
 export default RecipeCard;

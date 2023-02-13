@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpStatus,
-  Param,
   ParseArrayPipe,
   Post,
   Put,
@@ -47,9 +46,9 @@ export class RecipesController {
   async find(
     @Query('ids', new ParseArrayPipe({ optional: true, items: Number, separator: ',' }))
     ids: number[],
-    @Res() response: Response
+    @Res() response: Response    
   ) {
-    if (ids) {
+    if (ids) {      
       const result = await this.recipeService.getById(ids);
       infologger.debug(`Get recipes by id success : ${JSON.stringify(result)}`);
       return response.status(HttpStatus.OK).json(result);

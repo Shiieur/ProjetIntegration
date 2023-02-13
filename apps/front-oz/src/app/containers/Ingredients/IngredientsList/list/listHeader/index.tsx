@@ -2,8 +2,7 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
-import { IIngredient } from '../../../../../utils/interfaces';
+import { EntityType, IIngredient, IGetIngredient } from '../../../../../utils/interfaces';
 import Button from '@mui/material/Button';
 import { canSee } from '../../../../../utils/functions';
 
@@ -19,6 +18,8 @@ interface IListHeader {
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   rowCount: number;
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
+  setSelectedIngredient: React.Dispatch<React.SetStateAction<IGetIngredient>>;
+  resetIngredient: () => void;
 }
 
 const IHeadCells: readonly IHeadCell[] = [
@@ -49,7 +50,7 @@ const IHeadCells: readonly IHeadCell[] = [
 ];
 
 export const ListHeader = (props: IListHeader) => {
-  const { onSelectAllClick, numSelected, rowCount, setPageState } = props;
+  const { onSelectAllClick, numSelected, rowCount, setPageState, setSelectedIngredient, resetIngredient } = props;
 
   return (
     <TableHead>
@@ -58,17 +59,15 @@ export const ListHeader = (props: IListHeader) => {
         variant="contained"
         onClick={() => {
           setPageState('form');
+          resetIngredient();
         }}
       >
         Create
       </Button>
-      <TableRow>       
+      <TableRow>
         {IHeadCells.map((IHeadCell) => (
-          <TableCell
-            key={IHeadCell.id}
-            align={IHeadCell.numeric ? 'right' : 'left'}
-            padding={IHeadCell.disablePadding ? 'none' : 'normal'}>            
-              <p>{IHeadCell.label}</p>
+          <TableCell key={IHeadCell.id} align={IHeadCell.numeric ? 'right' : 'left'} padding={IHeadCell.disablePadding ? 'none' : 'normal'}>
+            <p>{IHeadCell.label}</p>
           </TableCell>
         ))}
       </TableRow>

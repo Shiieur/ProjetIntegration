@@ -1,10 +1,9 @@
-import { Length } from 'class-validator';
-import { bool, object, string } from 'yup';
-import { EntityType, IIngredient } from '../../../utils/interfaces';
+import { bool, object, string, array, number, mixed } from 'yup';
+import { EntityType, IIngredient, IFormikIngredient, IGetIngredient } from '../../../utils/interfaces';
 import { getToast, HttpClient } from '../../../utils/api';
 
 export interface IFormikConfiguration {
-  ingredient?: IIngredient;
+  ingredient?: IGetIngredient;
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
 }
 
@@ -12,53 +11,43 @@ const FormikConfiguration = ({
   ingredient,
   setPageState,
 }: IFormikConfiguration) => { 
-  const initialIngredient: IIngredient = {
-    ingredientId: ingredient?.ingredientId ?? -1,
-    name: ingredient?.name ?? '',
-    image: ingredient?.image ?? [{entityId: -1, entityType: EntityType.RECIPE, url: ''}],
-    alcoholic: false,      
+  const {ingredientId, name, image = [], alcoholic = false} = ingredient ?? {};
+  const initialIngredient: IFormikIngredient = {
+    ingredientId: ingredientId ?? -1,
+    name: name ?? '',
+    imageUrl: image[0].url ?? '',
+    alcoholic:alcoholic      
   };
- 
+
   const validationSchema = object({
     name: string()
       .max(50, 'Must be 50 characters or less')
-      .required('Required'),
-    image: string().required('Required'),
-    alcoholic: bool().required(),
+      .required('The ingredient needs a name.'),
+    imageUrl: string().url().required('URL Required'), 
+    alcoholic: bool().required('Is it alcoholic or not ?'),
   });
 
-  const postIngredient = ({ name, alcoholic, image }: IIngredient) => {
-    console.log({name, alcoholic, image});
-    HttpClient.post('/ingredients', {
-      name: name,
-      alcoholic: alcoholic,
-      imageUrl: image[0].url,
-    })
+  const postIngredient = (ingredient: IFormikIngredient) => {
+    HttpClient.post('/ingredients', ingredient)
       .then((response) => {
-        getToast(`The ingredient ${name} has been succesfuly created.`);
+        getToast(`The ingredient ${ingredient.name} has been succesfuly created.`);
       })
       .catch((error) => {
         getToast(`Error while trying to create the ingredient ${error}`, true);
       });
   };
 
-  const putIngredient = ({ name, alcoholic, image, ingredientId }: IIngredient) => {
-    console.log({ingredientId, name, alcoholic, image});
-    HttpClient.put(`/ingredients`, {
-      ingredientId: ingredientId,
-      name: name,
-      alcoholic: alcoholic,
-      imageUrl: image[0].url,
-    })
+  const putIngredient = (ingredient: IFormikIngredient) => {
+    HttpClient.put(`/ingredients`, ingredient)
       .then((response) => {
-        getToast(`The ingredient ${name} has been succesfuly modified.`);
+        getToast(`The ingredient ${ingredient.name} has been succesfuly modified.`);
       })
       .catch((error) => {
         getToast(`Error while trying to edit the ingredient ${error}`, true);
       });
   };
 
-  const onSubmit = async (ingredient: IIngredient) => {
+  const onSubmit = async (ingredient: IFormikIngredient) => { 
     ingredient.ingredientId > 0
       ? await putIngredient(ingredient)
       : await postIngredient(ingredient);
@@ -66,8 +55,7 @@ const FormikConfiguration = ({
     setPageState('list');
   };
 
-  return { initialValues: initialIngredient, onSubmit }; 
-  // validationSchema need to be added in the return
+  return { initialValues: initialIngredient, validationSchema, onSubmit };
 };
 
 export default FormikConfiguration;

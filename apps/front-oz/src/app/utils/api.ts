@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import * as rax from 'retry-axios';
-import { IIngredient, IRecipe } from './interfaces';
+import { IIngredient, IRecipe, IGetRecipe, IGetIngredient } from './interfaces';
 import toast from 'react-hot-toast';
 
 //récupère l'accesstoken dans le local storage et setup axios.
@@ -26,19 +26,19 @@ HttpClient.defaults.raxConfig = {
 };
 
 export const getIngredientsRequest = async (): Promise<
-  AxiosResponse<IIngredient[], any>
+  AxiosResponse<IGetIngredient[], any>
 > => {
   //rax.attach = retry policies -> by default 3s withtout config
   rax.attach(HttpClient);
-  const response = await HttpClient.get<IIngredient[]>('/ingredients');
+  const response = await HttpClient.get<IGetIngredient[]>('/ingredients');
   return response;
 };
 
 export const getRecipesRequest = async (): Promise<
-  AxiosResponse<IRecipe[], any>
+  AxiosResponse<IGetRecipe[], any>
 > => {
   rax.attach(HttpClient);
-  const response = await HttpClient.get<IRecipe[]>('/recipes');
+  const response = await HttpClient.get<IGetRecipe[]>('/recipes');
   return response;
 };
 

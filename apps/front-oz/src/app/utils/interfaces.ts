@@ -9,10 +9,40 @@ export enum RecipeType {
 }
 export interface IIngredient {
   ingredientId: number;
+  unitId: number;
   name: string;
   quantity?: number;
   alcoholic: boolean;
   image: IImage[];
+}
+
+export interface IFormikIngredient {
+  ingredientId: number;
+  name: string;
+  alcoholic: boolean;
+  imageUrl: string;
+}
+
+export interface IGetIngredient {
+  ingredientId: number;  
+  name: string;
+  quantity?: number;
+  alcoholic: boolean;
+  unit?: IUnit;  
+  image: IImage[];
+}
+
+export interface IGetRecipe {
+  recipeId: number;
+  name: string;
+  images: IImage[];
+  bookmarked: boolean;
+  steps: string;
+  quantity: number; //for the number of person
+  type: RecipeType;
+  author: string;
+  tags: string[];
+  ingredients: IGetIngredient[];  
 }
 
 export interface IImage {
@@ -22,7 +52,7 @@ export interface IImage {
 }
 
 export interface IRecipe {
-  id: number;
+  recipeId: number;
   name: string;
   images: IImage[];
   bookmarked: boolean;
@@ -34,8 +64,8 @@ export interface IRecipe {
   ingredients: IIngredient[];  
 }
 
-export interface IRecipeRequest {
-  id?: number;
+export interface IRecipeUpsert {
+  recipeId?: number;
   name: string;
   imageUrls: string[];
   steps: string;
@@ -46,7 +76,7 @@ export interface IRecipeRequest {
 }
 
 export interface IRecipeFormik {
-  id?: number;
+  recipeId?: number;
   name: string;
   images: 
   {
@@ -56,8 +86,16 @@ export interface IRecipeFormik {
   steps: string;
   quantity: number; //for the number of person
   type: RecipeType;
-  tags: string[];
-  ingredients: IIngredient[];  
+  tags: {
+    "label": string,
+    "value": string,
+  }[];
+  ingredients: IGetIngredient[];  
+}
+
+export interface IUnit {
+  unitId: number;
+  name: string;
 }
 
 

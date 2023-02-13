@@ -8,22 +8,19 @@ import Recipes from './containers/Recipes/recipes';
 import Home from './containers/Home/Home';
 import Ingredients from './containers/Ingredients/Ingredients';
 import FontStyles from 'src/assets/fontStyles';
+import { IRecipe, IIngredient } from './utils/interfaces';
 
 export function App() {
   const [pageState, setPageState] = useState<'list' | 'form'>('list');
 
   return (
     <>
-      <FontStyles/>      
+      <FontStyles />
       <Toaster />
       <Router>
-        <Header pageState={pageState} setPageState={setPageState}/>
+        <Header pageState={pageState} setPageState={setPageState} />
         <Routes>
-          <Route
-            key="ingredients"
-            path={'/ingredients'}
-            element={<Ingredients />}
-          />
+          <Route key="ingredients" path={'/ingredients'} element={<Ingredients pageState={pageState} setPageState={setPageState} />} />
           <Route key="recipes" path={'/recipes'} element={<Recipes pageState={pageState} setPageState={setPageState} />} />
           <Route path="*" key="default-error" element={<Home />} />
         </Routes>

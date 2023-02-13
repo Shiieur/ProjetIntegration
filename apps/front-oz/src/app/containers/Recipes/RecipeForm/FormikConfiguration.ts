@@ -1,15 +1,14 @@
 import { HttpClient, getToast } from '../../../utils/api';
 import { array, number, object, string } from 'yup';
-import { EntityType, IImage, IRecipe, IRecipeFormik, IRecipeRequest, RecipeType } from '../../../utils/interfaces';
+import { IRecipe, IRecipeFormik, IRecipeUpsert, IGetRecipe,RecipeType, IIngredient, IGetIngredient } from '../../../utils/interfaces';
+import { buildRecipeFormik, buildRecipeUpsert } from './helper';
 
 export interface IFormikConfiguration {
-  recipe?: IRecipe;
+  recipe: IGetRecipe;
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
-  setSelectedRecipe: React.Dispatch<React.SetStateAction<IRecipe>>;
+  setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
   resetIngredients: () => Promise<void>;
 }
-
-
 
 const FormikConfiguration = ({
   recipe,
@@ -17,57 +16,36 @@ const FormikConfiguration = ({
   setSelectedRecipe,
   resetIngredients,
 }: IFormikConfiguration) => {
+  const initialRecipe: IRecipeFormik = buildRecipeFormik(recipe ?? {});
 
-  const imagesFormik = recipe?.images.map(image => {
-    return {
-      value : image.url,
-      label : image.url 
-    }
-  }) ?? [];
+  const validationSchema = object({
+    name: string()
+      .max(50, 'Must be 50 characters or less')
+      .required('Required'),
+    images: array()
+    .of(
+      object().shape({
+        label: string(),
+        value: string(),
+      })
+    )
+    .required('Required'),
+    ingredients: array().min(1).required('At least 1 ingredient required.'),
+    quantity: number().moreThan(0).required('Require a number.'),
+    steps: string().required('Steps Required'),
+    tags: array()
+    .of(
+      object().shape({
+        label: string(),
+        value: string(),
+      })
+    ).max(3, 'A maximum of 3 tags are authorized.').required('Tags are required.')
+  });
 
-  const initialRecipe: IRecipeFormik = {
-    id: recipe?.id ?? -1,    
-    name: recipe?.name ?? '',
-    images : imagesFormik,
-    steps: recipe?.steps ?? '',
-    quantity: recipe?.quantity ?? -1,
-    type: recipe?.type ?? RecipeType.DRINK,
-    tags: recipe?.tags ?? [''],
-    ingredients: recipe?.ingredients ?? [],    
-  };
-  
-  // const validationSchema = object({
-  //   name: string()
-  //     .max(50, 'Must be 50 characters or less')
-  //     .required('Required'),
-  //   images: string().required('Required'),
-  //   ingredients: array().min(1).required('At least 1 ingredient required.'),
-  //   quantity: number().moreThan(-1).required('Require a number.'),
-  //   steps: string().required('Required'),
-  // });
-
-  const postRecipe = ({
-    name,
-    imageUrls,  
-    steps,
-    quantity,
-    type,
-    tags,
-    ingredientsInfo,
-  }: IRecipeRequest) => {
-    const recipe = {
-      name: name,
-      imageUrls: imageUrls,
-      steps: steps,
-      quantity: quantity,
-      type: type,
-      tags: tags,
-      ingredientsInfo: ingredientsInfo,
-    }
-    console.log(recipe)
-    HttpClient.post('/recipes', recipe)
+  const postRecipe = (recipeRequest: IRecipeUpsert) => {
+    HttpClient.post('/recipes', recipeRequest)
       .then((response) => {
-        getToast(`The recipe ${name} has been succesfuly created.`);
+        getToast(`The recipe ${recipeRequest.name} has been succesfuly created.`);
         setPageState('list');
       })
       .catch((error) => {
@@ -75,53 +53,27 @@ const FormikConfiguration = ({
       });
   };
 
-  const putRecipe = ({
-    id,
-    name,
-    imageUrls,
-    steps,
-    quantity,
-    type,
-    tags,
-    ingredientsInfo,
-  }: IRecipeRequest) => {
-    HttpClient.put(`/recipes/${id}`, {
-      name: name,
-      imageUrls: imageUrls,
-      steps: steps,
-      quantity: quantity,
-      type: type,
-      tags: tags,
-      ingredientsInfo: ingredientsInfo,
-    })
+  const putRecipe = (recipeRequest: IRecipeUpsert) => {
+    HttpClient.put(`/recipes`, recipeRequest)
       .then(async (response) => {
-        getToast(`The recipe ${name} has been succesfuly modified.`);
+        getToast(`The recipe ${recipeRequest.name} has been succesfuly modified.`);
         setPageState('list');
         resetIngredients();
       })
-      .catch((error) => {
+       .catch((error) => {
         getToast(`Error while trying to edit the recipe ${error}`, true);
       });
   };
 
   const onSubmit = async (recipeFormik : IRecipeFormik) => {
-    const images : string[] = recipeFormik.images.map(image => {
-      return image.value;
-    })
-
-    const recipe : IRecipeRequest = {
-      ...recipeFormik,     
-      ingredientsInfo : recipeFormik.ingredients,       
-      imageUrls: images
-    }
-
-    recipe.id && recipe.id > 0
-      ? await putRecipe(recipe)
-      : await postRecipe(recipe);
+    const recipeUpsert = buildRecipeUpsert(recipeFormik);
+    recipeUpsert.recipeId && recipeUpsert.recipeId > 0
+      ? await putRecipe(recipeUpsert)
+      : await postRecipe(recipeUpsert);
   };
 
-  return { initialValues: initialRecipe, onSubmit };
-  // validationSchema
+  return { initialValues: initialRecipe, validationSchema, onSubmit };
 };
+
 
 export default FormikConfiguration;

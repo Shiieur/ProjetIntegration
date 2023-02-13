@@ -2,23 +2,23 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import IngredientForm from './IngredientForm';
 import IngredientsList from './IngredientsList';
-import {
-  deleteIngredientRequest,
-  getIngredientsRequest,
-} from '../../utils/api';
-import { EntityType, IIngredient } from '../../utils/interfaces';
+import { deleteIngredientRequest, getIngredientsRequest } from '../../utils/api';
+import { EntityType, IGetIngredient, IIngredient } from '../../utils/interfaces';
 
-const Ingredients = () => {
-  const [ingredients, setIngredients] = useState<IIngredient[]>([]);
-  const [selectedIngredient, setSelectedIngredient] =
-    React.useState<IIngredient>({    
-      ingredientId: -1,
-      name: '',
-      image : [{entityId: -1, entityType: EntityType.INGREDIENT, url: ''}],
-      alcoholic: false,
-    });
+interface IIngredientsProps {
+  setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
+  pageState: 'list' | 'form';
+}
 
-  const [pageState, setPageState] = useState<'list' | 'form'>('list');
+const Ingredients = ({ pageState, setPageState }: IIngredientsProps) => {
+  const [ingredients, setIngredients] = useState<IGetIngredient[]>([]);
+  const [selectedIngredient, setSelectedIngredient] = React.useState<IGetIngredient>({
+    ingredientId: -1,
+    name: '',
+    image: [{ entityId: -1, entityType: EntityType.INGREDIENT, url: '' }],
+    alcoholic: false,
+    unit: { unitId: -1, name: '' },
+  });
 
   useEffect(() => {
     getIngredients();
@@ -26,6 +26,16 @@ const Ingredients = () => {
 
   const onRefresh = () => {
     getIngredients();
+  };
+
+  const resetIngredient = () => {
+    setSelectedIngredient({
+      ingredientId: -1,
+      name: '',
+      image: [{ entityId: -1, entityType: EntityType.INGREDIENT, url: '' }],
+      alcoholic: false,
+      unit: { unitId: -1, name: '' },
+    });
   };
 
   const getIngredients = async () => {
@@ -38,16 +48,14 @@ const Ingredients = () => {
     onRefresh();
   };
   return pageState === 'form' ? (
-    <IngredientForm
-      ingredient={selectedIngredient}
-      setPageState={setPageState}
-    />
+    <IngredientForm ingredient={selectedIngredient} setPageState={setPageState} />
   ) : (
     <IngredientsList
       ingredients={ingredients}
       setSelectedIngredient={setSelectedIngredient}
       deleteIngredient={deleteIngredient}
       setPageState={setPageState}
+      resetIngredient={resetIngredient}
       onRefresh={onRefresh}
     />
   );

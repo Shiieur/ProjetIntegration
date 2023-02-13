@@ -16,6 +16,7 @@ export const buildIngredientsWithImage = (ingredients: IIngredientEntity[], imag
   const ingredientsWithImage = ingredients.map((ingredient) => {    
     return {
       ...ingredient,
+      alcoholic: ingredient.alcoholic === 1,
       image: images.filter(image => image.entityId === ingredient.ingredientId)
     }
   });  

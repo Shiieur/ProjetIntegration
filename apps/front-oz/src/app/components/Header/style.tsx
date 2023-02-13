@@ -11,11 +11,10 @@ export const Container = styled.div`
 
 export const StyledContainer = styled(AnimateHeight)((props) => ({
   background: colors.black,
-  border: `2px solid ${colors.white}`,
 }));
 
 export const TextFieldContainer = styled.div`
-  display: grid;  
+  display: grid;
   grid-auto-flow: row;
   grid-gap: 5px;
   margin-top: 30px;
