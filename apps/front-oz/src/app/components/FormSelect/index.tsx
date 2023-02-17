@@ -1,4 +1,3 @@
-import './styles.css';
 import React, { Fragment } from 'react';
 import Select from 'react-select';
 

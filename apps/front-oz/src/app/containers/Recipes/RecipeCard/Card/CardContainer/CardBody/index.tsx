@@ -3,10 +3,9 @@ import IconButton from '@mui/material/IconButton';
 import TrashIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import React from 'react';
-import { IIngredient, IGetRecipe, IGetIngredient } from '../../../../../../utils/interfaces';
+import { IGetRecipe, IGetIngredient } from '../../../../../../utils/interfaces';
 import { canSee } from '../../../../../../utils/functions';
-import { ColumnGrid, RowGrid, Image } from './style';
-import { getUnits } from 'src/app/components/FormSelectList/helper';
+import { CardGrid, InfosGrid, Images, TopInfos, IngredientList, ImageIngredient, Rowing, WhiteText } from './style';
 
 interface IProps {
   recipe: IGetRecipe;
@@ -17,13 +16,12 @@ interface IProps {
 }
 
 export const CardBody = ({ recipe, setPageState, setSelectedRecipe, setIngredients, deleteRecipe }: IProps) => {
-  const units = getUnits();
   return (
     <CardContent>
-      <ColumnGrid>
-        <Image src={recipe.images[0]?.url} alt={recipe.name} />
-        <RowGrid>
-          <div className="top-infos">
+      <CardGrid>
+        <Images image={recipe.images[0]?.url} />
+        <InfosGrid>
+          <TopInfos>
             {canSee('moderator') ? (
               <IconButton
                 aria-label="edit_recipe"
@@ -45,6 +43,8 @@ export const CardBody = ({ recipe, setPageState, setSelectedRecipe, setIngredien
                 size="small"
                 onClick={() => {
                   deleteRecipe(recipe.recipeId, recipe.name);
+                  setSelectedRecipe({ ...recipe, recipeId: -1 });
+                  setPageState('list');
                 }}
               >
                 <TrashIcon />
@@ -52,29 +52,31 @@ export const CardBody = ({ recipe, setPageState, setSelectedRecipe, setIngredien
             ) : (
               <></>
             )}
-          </div>
+          </TopInfos>
           <div className="title">
             <Typography gutterBottom variant="h5" component="div">
-              {recipe.name} ({recipe.quantity} serving)
+              {recipe.name} ({recipe.quantity} portions)
             </Typography>
           </div>
           <div className="ingredients">
             <Typography variant="body2" color="text.secondary">
               {recipe.ingredients.map((ingredient) => (
-                <li>
-                  {ingredient.name}:{ingredient.quantity}
-                  {ingredient.unit?.name ?? ''}
-                </li>
+                <IngredientList>
+                  <Rowing>
+                    <ImageIngredient image={ingredient.image[0]?.url} /> {ingredient.name}: {' ' + ingredient.quantity + ' '}
+                    {ingredient.unit?.name ?? ''}
+                  </Rowing>
+                </IngredientList>
               ))}
             </Typography>
           </div>
           <div className="steps">
             <Typography variant="body2" color="text.secondary">
-              {recipe.steps}
+              <WhiteText>{recipe.steps}</WhiteText>
             </Typography>
           </div>
-        </RowGrid>
-      </ColumnGrid>
+        </InfosGrid>
+      </CardGrid>
     </CardContent>
   );
 };

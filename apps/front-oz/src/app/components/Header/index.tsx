@@ -17,16 +17,17 @@ import { Button } from '@mui/material';
 import { colors } from 'src/assets/colors';
 import { canSee } from 'src/app/utils/functions';
 import { useNavigate } from 'react-router-dom';
-import { RecipeType } from 'src/app/utils/interfaces';
+import { IGetRecipe, RecipeType } from 'src/app/utils/interfaces';
 
 interface IHeaderProps {
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
-  pageState: 'list' | 'form';
+  selectedRecipe: IGetRecipe;
+  setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
+  setFilterUser: React.Dispatch<React.SetStateAction<boolean>>;
+  setFilterType: React.Dispatch<React.SetStateAction<RecipeType>>;
 }
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const Header = ({ pageState, setPageState }: IHeaderProps) => {
+const Header = ({ setPageState, selectedRecipe, setSelectedRecipe, setFilterUser, setFilterType }: IHeaderProps) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const navigate = useNavigate();
   const [dropBoxState, setDropBoxState] = useState<'search' | 'menu'>('search');
@@ -34,25 +35,30 @@ const Header = ({ pageState, setPageState }: IHeaderProps) => {
   const openHeight = 170;
   const openHeightMenu = 300;
   const [height, setHeight] = useState(closeHeight);
-  const url = 'http://localhost:4200';
 
   return (
     <StyledContainer duration={500} height={height}>
       <Container>
         <IconButton
           onClick={() => {
+            setSelectedRecipe({ ...selectedRecipe, recipeId: -1 });
+            setFilterUser(false);
+            setFilterType(RecipeType.DRINK);
             setPageState('list');
             navigate('recipes');
-            localStorage.setItem('search', RecipeType.MEAL);
+            setHeight(closeHeight);
           }}
         >
           <LocalBarIcon fontSize="large" />
         </IconButton>
         <IconButton
           onClick={() => {
+            setSelectedRecipe({ ...selectedRecipe, recipeId: -1 });
+            setFilterUser(false);
+            setFilterType(RecipeType.MEAL);
             setPageState('list');
             navigate('recipes');
-            localStorage.setItem('search', RecipeType.DRINK);
+            setHeight(closeHeight);
           }}
         >
           <LocalDiningIcon fontSize="large" />
@@ -113,7 +119,15 @@ const Header = ({ pageState, setPageState }: IHeaderProps) => {
           <TextFieldContainer>
             {isAuthenticated && !isLoading ? (
               <>
-                <Button sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem' }}>Mes recettes</Button>
+                <Button
+                  sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem' }}
+                  onClick={() => {
+                    setFilterUser(true);
+                    setHeight(closeHeight);
+                  }}
+                >
+                  Mes recettes
+                </Button>
                 {canSee('moderator') === true ? (
                   <Button
                     sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem' }}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import RecipeForm from './RecipeForm';
-import { EntityType, IIngredient, IGetRecipe, IGetIngredient, IRecipe, RecipeType } from '../../utils/interfaces';
+import { IGetRecipe, IGetIngredient, RecipeType } from '../../utils/interfaces';
 import RecipeCard from './RecipeCard';
 import { deleteRecipeRequest, getRecipesRequest, getIngredientsRequest } from '../../utils/api';
 import { CardBody } from './RecipeCard/Card';
@@ -9,25 +9,16 @@ import { CardBody } from './RecipeCard/Card';
 interface IRecipesProps {
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
   pageState: 'list' | 'form';
+  selectedRecipe: IGetRecipe;
+  setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
+  filterUser: boolean;
+  filterType: RecipeType;
 }
 
-const Recipes = ({ pageState, setPageState }: IRecipesProps) => {
+const Recipes = ({ pageState, setPageState, selectedRecipe, setSelectedRecipe, filterUser, filterType }: IRecipesProps) => {
   const [recipes, setRecipes] = useState<IGetRecipe[]>([]);
-
+  const user = 'Paulo'; //to be changed with getUser when the User WS is up for the profile management
   const [ingredients, setIngredients] = useState<IGetIngredient[]>([]);
-
-  const [selectedRecipe, setSelectedRecipe] = React.useState<IGetRecipe>({
-    recipeId: -1,
-    name: '',
-    images: [{ entityId: -1, entityType: EntityType.RECIPE, url: '' }],
-    bookmarked: false,
-    steps: '',
-    quantity: 0,
-    type: RecipeType.DRINK,
-    author: '',
-    tags: [''],
-    ingredients: [],
-  });
 
   useEffect(() => {
     getRecipes();
@@ -64,6 +55,9 @@ const Recipes = ({ pageState, setPageState }: IRecipesProps) => {
       setSelectedRecipe={setSelectedRecipe}
       setIngredients={setIngredients}
       deleteRecipe={deleteRecipe}
+      user={user}
+      filterUser={filterUser}
+      filterType={filterType}
       onRefresh={onRefresh}
     />
   ) : (

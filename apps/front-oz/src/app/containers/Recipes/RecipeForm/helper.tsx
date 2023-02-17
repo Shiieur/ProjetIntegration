@@ -18,7 +18,7 @@ export const buildRecipeFormik = (recipe: IGetRecipe): IRecipeFormik => {
     images: imagesFormik,
     steps: steps ?? '',
     quantity: quantity ?? -1,
-    type: type ?? RecipeType.DRINK,
+    type: type ?? RecipeType,
     tags: tagsFormik,
     ingredients: ingredients ?? [],
   };

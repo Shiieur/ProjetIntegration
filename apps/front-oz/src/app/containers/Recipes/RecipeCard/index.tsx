@@ -1,6 +1,6 @@
 import './styles.css';
 import * as React from 'react';
-import { IIngredient, IGetRecipe, IImage, IGetIngredient } from '../../../utils/interfaces';
+import { IGetRecipe, IGetIngredient, RecipeType } from '../../../utils/interfaces';
 import { useEffect } from 'react';
 import CardInfos from 'src/app/components/CardsGrid/CardInfos';
 import { Container } from 'src/app/components/CardsGrid/style';
@@ -11,17 +11,13 @@ export interface IRecipeCard {
   setIngredients: React.Dispatch<React.SetStateAction<IGetIngredient[]>>;
   setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
   deleteRecipe: (id: number, name?: string) => Promise<void>;
+  user: string;
+  filterUser: boolean;
+  filterType: RecipeType;
   onRefresh: () => void;
 }
 
-export const RecipeCard = ({
-  recipes,
-  setPageState,
-  setSelectedRecipe, //TODO
-  setIngredients, //TODO
-  deleteRecipe, //TODO
-  onRefresh,
-}: IRecipeCard) => {
+export const RecipeCard = ({ recipes, setPageState, setSelectedRecipe, setIngredients, deleteRecipe, user, filterUser, filterType, onRefresh }: IRecipeCard) => {
   useEffect(() => {
     onRefresh();
   }, []);
@@ -34,9 +30,12 @@ export const RecipeCard = ({
 
   return (
     <Container>
-      {recipes.map((recipe, index) => (
-        <CardInfos recipe={recipe} inverted={isInverted(index)} setSelectedRecipe={setSelectedRecipe} setPageState={setPageState} deleteRecipe={deleteRecipe} />
-      ))}
+      {recipes
+        .filter((recipe) => !filterUser || recipe.author === user)
+        .filter((recipe) => recipe.type === filterType)
+        .map((recipe, index) => (
+          <CardInfos recipe={recipe} inverted={isInverted(index)} setSelectedRecipe={setSelectedRecipe} setPageState={setPageState} deleteRecipe={deleteRecipe} />
+        ))}
     </Container>
   );
 };

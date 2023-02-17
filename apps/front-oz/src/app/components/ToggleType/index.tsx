@@ -16,19 +16,16 @@ const TypeToggle = ({ label, name, formik }: ITypeToggleProps) => {
     formik.setFieldValue(name, newType);
   };
 
-  console.log('formik.value[name]');
-  console.log(formik.values[name]);
-
   return (
     <>
       <Title>
         <label>{label}</label>
       </Title>
-      <ToggleButtonGroup color="primary" value={formik.values[name]?.toUpperCase()} onChange={handleChange} exclusive aria-label="Platform">
-        <ToggleButton value="DRINK">
+      <ToggleButtonGroup color="primary" value={formik.values[name]} onChange={handleChange} exclusive aria-label="Platform">
+        <ToggleButton value="Drink">
           <LocalBarIcon fontSize="large" />
         </ToggleButton>
-        <ToggleButton value="MEAL">
+        <ToggleButton value="Meal">
           <LocalDiningIcon fontSize="large" />
         </ToggleButton>
       </ToggleButtonGroup>

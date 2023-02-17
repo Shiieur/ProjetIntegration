@@ -29,13 +29,13 @@ const RecipeForm = ({ recipe, ingredientList, setPageState, setSelectedRecipe, r
         <form onSubmit={formik.handleSubmit}>
           <TextFieldContainer>
             <TypeToggle label="Type" name="type" formik={formik} />
-            <FormInput label="Name" name="name" inputType="text" placeholder="Name..." formik={formik} />
-            <FormInput label="Images" name="images" inputType="creatable" placeholder="Image link (for now)..." formik={formik} />
-            <FormInput label="Recipe Quantity" name="quantity" inputType="number" placeholder="Quantity (in liters)" formik={formik} />
+            <FormInput label="Nom" name="name" inputType="text" placeholder="Nom..." formik={formik} />
+            <FormInput label="Images" name="images" inputType="creatable" placeholder="URLs pour l'instant..." formik={formik} />
+            <FormInput label="Portions" name="quantity" inputType="number" placeholder="Pour ... personne(s)" formik={formik} />
             <FormSelectList ingredients={ingredientList} recipe={recipe} setPageStage={setPageState} formik={formik} />
-            <FormInput label="Steps" name="steps" inputType="text" placeholder="Steps (will keep the html)" formik={formik} />
+            <FormInput label="Étapes" name="steps" inputType="text" placeholder="..." formik={formik} />
             <FormInput label="Tags" name="tags" inputType="creatable" placeholder="Tags (max 3)..." formik={formik} />
-            <SubmitButton type="submit" label="Confirm" />
+            <SubmitButton type="submit" label="Confirmer" />
           </TextFieldContainer>
         </form>
       </div>

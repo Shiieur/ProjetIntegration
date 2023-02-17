@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import FormSelect from '../FormSelect';
 import { getIngredientsOptions, getUnitOptions, setSelectedValuesInFormik, units } from './helper';
-import { IIngredient, IRecipe, IGetRecipe, IGetIngredient } from '../../utils/interfaces';
+import { IGetRecipe, IGetIngredient } from '../../utils/interfaces';
+import { IngredientBox, IngredientList, Title } from './style';
 
 export interface IOptions {
   value: number;
@@ -97,9 +98,6 @@ const FormSelectList = ({ ingredients, recipe, formik }: IFormSelectListProps) =
   };
 
   const onSelectChangeUnit = (ingredientId: number, selectedUnit?: IOptions) => {
-    console.log('ingredientId', ingredientId);
-    console.log('selectedUnit', selectedUnit);
-
     const finalSelectedIngredients = selectedIngredients;
     const selectedIngredientUnit: IIngredientUnit[] = [{ ingredientId: ingredientId, unitId: selectedUnit?.value ?? -1, name: selectedUnit?.label ?? '' }];
     // Set formik values before re-adding the default one
@@ -149,8 +147,6 @@ const FormSelectList = ({ ingredients, recipe, formik }: IFormSelectListProps) =
   };
 
   const getUnit = (ingredientId: number) => {
-    console.log('ingredientId', ingredientId);
-
     const selectedUnitForIngredient: IGetIngredient = formik.values.ingredients.filter((ingredient: IGetIngredient) => ingredient.ingredientId === ingredientId)[0];
     const { name, unitId } = units.filter((unit) => unit.unitId === selectedUnitForIngredient?.unit?.unitId)[0] ?? {};
     if (!unitId || !name) return undefined;
@@ -171,9 +167,10 @@ const FormSelectList = ({ ingredients, recipe, formik }: IFormSelectListProps) =
   }
 
   return (
-    <>
+    <IngredientList>
       {selectedIngredients.map((ingredient, index) => (
-        <>
+        <IngredientBox>
+          <Title>{index + 1 + 'e Ingrédient'}</Title>
           <FormSelect
             key={'ingredientOption_' + index}
             options={getIngredientsOptions(ingredients, selectedIngredients)}
@@ -199,9 +196,9 @@ const FormSelectList = ({ ingredients, recipe, formik }: IFormSelectListProps) =
             onSelectChange={(values) => onSelectChangeUnit(ingredient.value, values)}
             name="units"
           />
-        </>
+        </IngredientBox>
       ))}
-    </>
+    </IngredientList>
   );
 };
 
