@@ -25,9 +25,11 @@ interface IHeaderProps {
   setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
   setFilterUser: React.Dispatch<React.SetStateAction<boolean>>;
   setFilterType: React.Dispatch<React.SetStateAction<RecipeType>>;
+  setRecipeFilterSearch: React.Dispatch<React.SetStateAction<string>>;
+  setIngredientFilterSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Header = ({ setPageState, selectedRecipe, setSelectedRecipe, setFilterUser, setFilterType }: IHeaderProps) => {
+const Header = ({ setPageState, selectedRecipe, setSelectedRecipe, setFilterUser, setFilterType, setRecipeFilterSearch, setIngredientFilterSearch }: IHeaderProps) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const navigate = useNavigate();
   const [dropBoxState, setDropBoxState] = useState<'search' | 'menu'>('search');
@@ -35,6 +37,21 @@ const Header = ({ setPageState, selectedRecipe, setSelectedRecipe, setFilterUser
   const openHeight = 170;
   const openHeightMenu = 300;
   const [height, setHeight] = useState(closeHeight);
+
+  const resetRecipe = () => {
+    setSelectedRecipe({
+      recipeId: -1,
+      name: '',
+      images: [],
+      bookmarked: false,
+      steps: '',
+      quantity: 0, //for the number of person
+      type: RecipeType.DRINK,
+      author: '',
+      tags: [],
+      ingredients: [],
+    });
+  };
 
   return (
     <StyledContainer duration={500} height={height}>
@@ -107,11 +124,11 @@ const Header = ({ setPageState, selectedRecipe, setSelectedRecipe, setFilterUser
         <Container>
           <TextFieldContainer>
             <Text>Recette</Text>
-            <TextField placeholder={'Search...'} />
+            <TextField placeholder={'Search...'} type="Recipe" setRecipeFilterSearch={setRecipeFilterSearch} setIngredientFilterSearch={setIngredientFilterSearch} />
           </TextFieldContainer>
           <TextFieldContainer>
             <Text>Ingredient</Text>
-            <TextField placeholder={'Search...'} />
+            <TextField placeholder={'Search...'} type="Ingredient" setRecipeFilterSearch={setRecipeFilterSearch} setIngredientFilterSearch={setIngredientFilterSearch} />
           </TextFieldContainer>
         </Container>
       ) : (
@@ -145,6 +162,7 @@ const Header = ({ setPageState, selectedRecipe, setSelectedRecipe, setFilterUser
                 <Button
                   sx={{ color: 'white', fontFamily: 'comfortaa', fontSize: '1.4rem' }}
                   onClick={() => {
+                    resetRecipe();
                     setPageState('form');
                     navigate('recipes');
                     setHeight(closeHeight);

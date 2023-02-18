@@ -15,11 +15,11 @@ export const CardGrid = styled.div`
 
 export const InfosGrid = styled.div`
   display: grid;
-  grid-template-rows: 10% 10% 20% 60%;
+  grid-template-rows: 10% 10% 30% 50%;
   color: white;
   grid-auto-flow: row;
   grid-gap: 10px px;
-  align-items: center;
+  align-items: stretch;
   justify-items: center;
 `;
 
@@ -56,5 +56,12 @@ export const ImageIngredient = styled.div<ImagesProps>`
 `;
 
 export const WhiteText = styled.div`
+  max-width: 650px;
   color: ${colors.white};
+`;
+
+export const Here = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 `;

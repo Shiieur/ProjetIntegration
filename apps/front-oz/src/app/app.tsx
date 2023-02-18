@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -26,13 +26,23 @@ export function App() {
   });
   const [filterUser, setFilterUser] = useState<boolean>(false);
   const [filterType, setFilterType] = useState<RecipeType>(RecipeType.DRINK);
+  const [recipeFilterSearch, setRecipeFilterSearch] = useState<string>('');
+  const [ingredientFilterSearch, setIngredientFilterSearch] = useState<string>('');
 
   return (
     <>
       <FontStyles />
       <Toaster />
       <Router>
-        <Header setPageState={setPageState} selectedRecipe={selectedRecipe} setSelectedRecipe={setSelectedRecipe} setFilterUser={setFilterUser} setFilterType={setFilterType} />
+        <Header
+          setPageState={setPageState}
+          selectedRecipe={selectedRecipe}
+          setSelectedRecipe={setSelectedRecipe}
+          setFilterUser={setFilterUser}
+          setFilterType={setFilterType}
+          setRecipeFilterSearch={setRecipeFilterSearch}
+          setIngredientFilterSearch={setIngredientFilterSearch}
+        />
         <Routes>
           <Route key="ingredients" path={'/ingredients'} element={<Ingredients pageState={pageState} setPageState={setPageState} />} />
           <Route
@@ -46,6 +56,8 @@ export function App() {
                 setSelectedRecipe={setSelectedRecipe}
                 filterUser={filterUser}
                 filterType={filterType}
+                recipeFilterSearch={recipeFilterSearch}
+                ingredientFilterSearch={ingredientFilterSearch}
               />
             }
           />

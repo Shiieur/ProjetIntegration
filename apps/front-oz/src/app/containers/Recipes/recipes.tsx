@@ -5,6 +5,7 @@ import { IGetRecipe, IGetIngredient, RecipeType } from '../../utils/interfaces';
 import RecipeCard from './RecipeCard';
 import { deleteRecipeRequest, getRecipesRequest, getIngredientsRequest } from '../../utils/api';
 import { CardBody } from './RecipeCard/Card';
+import { buildRecipeFormik } from './RecipeForm/helper';
 
 interface IRecipesProps {
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
@@ -13,11 +14,13 @@ interface IRecipesProps {
   setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
   filterUser: boolean;
   filterType: RecipeType;
+  recipeFilterSearch: string;
+  ingredientFilterSearch: string;
 }
 
-const Recipes = ({ pageState, setPageState, selectedRecipe, setSelectedRecipe, filterUser, filterType }: IRecipesProps) => {
+const Recipes = ({ pageState, setPageState, selectedRecipe, setSelectedRecipe, filterUser, filterType, recipeFilterSearch, ingredientFilterSearch }: IRecipesProps) => {
   const [recipes, setRecipes] = useState<IGetRecipe[]>([]);
-  const user = 'Paulo'; //to be changed with getUser when the User WS is up for the profile management
+  const user = 'Calvin'; //to be changed with getUser when the User WS is up for the profile management
   const [ingredients, setIngredients] = useState<IGetIngredient[]>([]);
 
   useEffect(() => {
@@ -47,7 +50,14 @@ const Recipes = ({ pageState, setPageState, selectedRecipe, setSelectedRecipe, f
   };
 
   return pageState === 'form' ? (
-    <RecipeForm recipe={selectedRecipe} setPageState={setPageState} ingredientList={ingredients} setSelectedRecipe={setSelectedRecipe} resetIngredients={getIngredients} />
+    <RecipeForm
+      recipe={selectedRecipe}
+      setPageState={setPageState}
+      ingredientList={ingredients}
+      setSelectedRecipe={setSelectedRecipe}
+      resetIngredients={getIngredients}
+      onRefresh={onRefresh}
+    />
   ) : selectedRecipe.recipeId === -1 ? (
     <RecipeCard
       recipes={recipes}
@@ -58,6 +68,8 @@ const Recipes = ({ pageState, setPageState, selectedRecipe, setSelectedRecipe, f
       user={user}
       filterUser={filterUser}
       filterType={filterType}
+      recipeFilterSearch={recipeFilterSearch}
+      ingredientFilterSearch={ingredientFilterSearch}
       onRefresh={onRefresh}
     />
   ) : (

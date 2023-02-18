@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/EditOutlined';
 import React from 'react';
 import { IGetRecipe, IGetIngredient } from '../../../../../../utils/interfaces';
 import { canSee } from '../../../../../../utils/functions';
-import { CardGrid, InfosGrid, Images, TopInfos, IngredientList, ImageIngredient, Rowing, WhiteText } from './style';
+import { CardGrid, InfosGrid, Images, TopInfos, IngredientList, ImageIngredient, Rowing, WhiteText, Here } from './style';
 
 interface IProps {
   recipe: IGetRecipe;
@@ -53,13 +53,11 @@ export const CardBody = ({ recipe, setPageState, setSelectedRecipe, setIngredien
               <></>
             )}
           </TopInfos>
-          <div className="title">
-            <Typography gutterBottom variant="h5" component="div">
-              {recipe.name} ({recipe.quantity} portions)
-            </Typography>
-          </div>
-          <div className="ingredients">
-            <Typography variant="body2" color="text.secondary">
+          <Typography gutterBottom variant="h5" component="div">
+            {recipe.name} ({recipe.quantity} {recipe.quantity === 1 ? 'portion' : 'portions'})
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            <Here>
               {recipe.ingredients.map((ingredient) => (
                 <IngredientList>
                   <Rowing>
@@ -68,13 +66,11 @@ export const CardBody = ({ recipe, setPageState, setSelectedRecipe, setIngredien
                   </Rowing>
                 </IngredientList>
               ))}
-            </Typography>
-          </div>
-          <div className="steps">
-            <Typography variant="body2" color="text.secondary">
-              <WhiteText>{recipe.steps}</WhiteText>
-            </Typography>
-          </div>
+            </Here>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            <WhiteText>{recipe.steps}</WhiteText>
+          </Typography>
         </InfosGrid>
       </CardGrid>
     </CardContent>

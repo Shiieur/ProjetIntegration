@@ -13,13 +13,15 @@ export interface IRecipeForm {
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
   setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
   resetIngredients: () => Promise<void>;
+  onRefresh: () => void;
 }
-const RecipeForm = ({ recipe, ingredientList, setPageState, setSelectedRecipe, resetIngredients }: IRecipeForm) => {
+const RecipeForm = ({ recipe, ingredientList, setPageState, setSelectedRecipe, resetIngredients, onRefresh }: IRecipeForm) => {
   const { ...configuration } = FormikConfiguration({
     recipe,
     setPageState,
     setSelectedRecipe,
     resetIngredients,
+    onRefresh,
   });
   const formik = useFormik(configuration);
 

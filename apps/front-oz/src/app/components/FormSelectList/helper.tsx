@@ -45,14 +45,15 @@ export const units: IUnit[] = [
   { unitId: 1, name: '' },
   { unitId: 2, name: 'ml' },
   { unitId: 3, name: 'g' },
-  { unitId: 4, name: 'leaf' },
-  { unitId: 5, name: 'wedge' },
-  { unitId: 6, name: 'slice' },
-  { unitId: 7, name: 'ounce' },
-  { unitId: 8, name: 'tablespoon' },
-  { unitId: 9, name: 'teaspoon' },
-  { unitId: 10, name: 'cup' },
-  { unitId: 11, name: 'fillet' },
+  { unitId: 4, name: 'feuille(s)' },
+  { unitId: 5, name: 'quartier(s)' },
+  { unitId: 6, name: 'tranche(s)' },
+  { unitId: 7, name: 'once' },
+  { unitId: 8, name: 'c.à.s' },
+  { unitId: 9, name: 'c.à.c' },
+  { unitId: 10, name: 'verre' },
+  { unitId: 11, name: 'filet' },
+  { unitId: 12, name: 'pincée' },
 ];
 
 export const getUnitOptions = () => {

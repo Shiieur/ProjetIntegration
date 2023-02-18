@@ -33,7 +33,6 @@ const CardFooter = ({ inverted, bookmarked, recipe, setPageState, setSelectedRec
                 setSelectedRecipe(recipe);
               }}
             >
-              {/* here receive the id of the recipe to fetch on click */}
               <ArrowForwardIosIcon sx={{ color: colors.white }} fontSize="large" />
             </IconButton>
           </BottomRight>
@@ -41,7 +40,12 @@ const CardFooter = ({ inverted, bookmarked, recipe, setPageState, setSelectedRec
       ) : (
         <>
           <BottomLeft>
-            <IconButton onClick={() => console.log('Clicked')}>
+            <IconButton
+              onClick={() => {
+                setPageState('list');
+                setSelectedRecipe(recipe);
+              }}
+            >
               <ArrowBackIosIcon sx={{ color: colors.white }} fontSize="large" />
             </IconButton>
           </BottomLeft>

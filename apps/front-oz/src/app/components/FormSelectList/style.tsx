@@ -4,7 +4,6 @@ import { colors } from '../../../assets/colors';
 export const IngredientList = styled.div`
   display: grid;
   grid-template-columns: repeat(5, auto);
-  grid-gap: 10px;
   padding: 30px;
 `;
 

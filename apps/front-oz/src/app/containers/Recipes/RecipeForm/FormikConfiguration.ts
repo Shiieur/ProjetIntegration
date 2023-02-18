@@ -8,6 +8,8 @@ export interface IFormikConfiguration {
   setPageState: React.Dispatch<React.SetStateAction<'list' | 'form'>>;
   setSelectedRecipe: React.Dispatch<React.SetStateAction<IGetRecipe>>;
   resetIngredients: () => Promise<void>;
+  
+  onRefresh: () => void;
 }
 
 const FormikConfiguration = ({
@@ -15,6 +17,7 @@ const FormikConfiguration = ({
   setPageState,
   setSelectedRecipe,
   resetIngredients,
+  onRefresh
 }: IFormikConfiguration) => {
   const initialRecipe: IRecipeFormik = buildRecipeFormik(recipe ?? {});
 
@@ -46,7 +49,7 @@ const FormikConfiguration = ({
     HttpClient.post('/recipes', recipeRequest)
       .then((response) => {
         getToast(`The recipe ${recipeRequest.name} has been succesfuly created.`);
-        setPageState('list');
+        onRefresh();
       })
       .catch((error) => {
         getToast(`Error while trying to create the recipe ${error}`, true);
@@ -57,7 +60,7 @@ const FormikConfiguration = ({
     HttpClient.put(`/recipes`, recipeRequest)
       .then(async (response) => {
         getToast(`The recipe ${recipeRequest.name} has been succesfuly modified.`);
-        setPageState('list');
+        onRefresh();
         resetIngredients();
       })
        .catch((error) => {
